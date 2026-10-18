@@ -1,3 +1,4 @@
+
 streamlit
 yfinance
 pandas
@@ -6,3 +7,4 @@ scipy
 scikit-learn
 matplotlib
 plotly
+seaborn
