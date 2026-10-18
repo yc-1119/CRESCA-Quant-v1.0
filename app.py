@@ -37,20 +37,6 @@ with st.sidebar:
     cost_bps = st.slider("Transaction cost (basis points)", 0.0, 25.0, 5.0, 1.0)
     run = st.button("Run quantitative analysis", type="primary", use_container_width=True)
 
-if "cresca_results" not in st.session_state:
-    st.info("Choose your settings in the sidebar, then click **Run quantitative analysis**.")
-    st.markdown("""
-    ### What this dashboard explores
-    - Historical market performance and risk
-    - Random Forest volatility forecasts compared with a naive baseline
-    - Long-only portfolio allocation research
-    - A simple momentum backtest with illustrative transaction costs
-    - Portfolio risk metrics and hypothetical stress scenarios
-
-    Results depend on the selected assets, dates, and data-provider availability. Historical results do not predict future performance.
-    """)
-    st.stop()
-
 if run:
     if len(tickers) < 2:
         st.error("Enter at least two valid tickers.")
@@ -100,6 +86,20 @@ if run:
             st.error(f"Analysis could not complete: {exc}")
             st.info("Check ticker symbols, date range, internet/data-provider availability, and dependency installation.")
             st.stop()
+
+if "cresca_results" not in st.session_state:
+    st.info("Choose your settings in the sidebar, then click **Run quantitative analysis**.")
+    st.markdown("""
+    ### What this dashboard explores
+    - Historical market performance and risk
+    - Random Forest volatility forecasts compared with a naive baseline
+    - Long-only portfolio allocation research
+    - A simple momentum backtest with illustrative transaction costs
+    - Portfolio risk metrics and hypothetical stress scenarios
+
+    Results depend on the selected assets, dates, and data-provider availability. Historical results do not predict future performance.
+    """)
+    st.stop()
 
 data = st.session_state["cresca_results"]
 # Re-run results if settings changed and user clicks the button; otherwise show last successful run.
@@ -170,6 +170,53 @@ with tab5:
     st.metric("Illustrative combined portfolio shock", f"{data['stress_impact']:.2%}")
     st.dataframe(data["stress_table"].style.format("{:.2%}"), use_container_width=True)
     st.caption("Stress scenario assumptions: SPY/QQQ/IWM −10%; GLD −5%; other included assets +3%. These are deliberately simplified and editable in the code.")
+
+with st.expander("Download research data", expanded=False):
+    st.write("Export the data behind the charts for further inspection. CSV downloads contain historical research outputs, not live trading instructions.")
+    c1, c2, c3 = st.columns(3)
+    c1.download_button(
+        "Download adjusted prices (CSV)",
+        data=prices.to_csv(index_label="Date").encode("utf-8"),
+        file_name="cresca_adjusted_prices.csv",
+        mime="text/csv",
+        use_container_width=True,
+    )
+    c2.download_button(
+        "Download asset risk summary (CSV)",
+        data=data["summary"].to_csv(index_label="Asset").encode("utf-8"),
+        file_name="cresca_asset_risk_summary.csv",
+        mime="text/csv",
+        use_container_width=True,
+    )
+    c3.download_button(
+        "Download strategy comparison (CSV)",
+        data=data["comparison"].to_csv(index_label="Date").encode("utf-8"),
+        file_name="cresca_strategy_comparison.csv",
+        mime="text/csv",
+        use_container_width=True,
+    )
+    c4, c5, c6 = st.columns(3)
+    c4.download_button(
+        "Download optimized weights (CSV)",
+        data=data["opt_weights"].rename("Optimized weight").to_csv().encode("utf-8"),
+        file_name="cresca_optimized_weights.csv",
+        mime="text/csv",
+        use_container_width=True,
+    )
+    c5.download_button(
+        "Download volatility forecasts (CSV)",
+        data=data["forecast_results"].to_csv(index_label="Date").encode("utf-8"),
+        file_name="cresca_volatility_forecasts.csv",
+        mime="text/csv",
+        use_container_width=True,
+    )
+    c6.download_button(
+        "Download stress test (CSV)",
+        data=data["stress_table"].to_csv(index_label="Asset").encode("utf-8"),
+        file_name="cresca_stress_test.csv",
+        mime="text/csv",
+        use_container_width=True,
+    )
 
 st.divider()
 st.caption("CRESCA Quant is an educational research prototype. It does not provide personalized financial advice, guarantee results, or account for all real-world trading constraints.")
