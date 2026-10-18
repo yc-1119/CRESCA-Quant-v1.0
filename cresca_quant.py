@@ -212,7 +212,7 @@ asset_formatters = {
     "Historical VaR 95% (daily)": "{:.2%}",
     "Historical CVaR 95% (daily)": "{:.2%}",
 }
-display(asset_summary.style.format(asset_formatters).set_caption("Historical asset statistics"))
+print(asset_summary.to_string())
 
 
 # ========================================================================
