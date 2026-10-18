@@ -330,7 +330,7 @@ metrics = pd.DataFrame({
         mean_squared_error(model_results["Actual future volatility"], model_results["Naive baseline"]) ** 0.5,
     ],
 })
-display(metrics)
+print(metrics.to_string() if hasattr(metrics, "to_string") else metrics)
 
 fig, ax = plt.subplots(figsize=(12, 5))
 model_results.plot(ax=ax)
