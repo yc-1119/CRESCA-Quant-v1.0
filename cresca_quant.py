@@ -120,7 +120,7 @@ prices = download_adjusted_prices(CFG.tickers, CFG.start_date, CFG.end_date)
 returns = prices.pct_change().dropna()
 
 print(f"Price rows: {len(prices):,} | Assets: {list(prices.columns)}")
-display(prices.tail())
+print(prices.tail())
 
 
 # ========================================================================
