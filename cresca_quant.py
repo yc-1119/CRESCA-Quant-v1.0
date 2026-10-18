@@ -404,7 +404,7 @@ weights_table = pd.DataFrame({
     "Optimized weight": opt_weights,
     "Equal weight": equal_weights,
 })
-display(weights_table.style.format("{:.1%}"))
+print(weights_table.to_string())
 
 fig, ax = plt.subplots(figsize=(9, 4))
 weights_table.plot(kind="bar", ax=ax)
