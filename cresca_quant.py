@@ -133,7 +133,7 @@ quality_report = pd.DataFrame({
     "last_valid_date": prices.apply(lambda s: s.last_valid_index()),
     "observations": prices.count(),
 })
-display(quality_report)
+print(quality_report)
 
 if (prices <= 0).any().any():
     raise ValueError("Prices must be positive for log-return calculations.")
