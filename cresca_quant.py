@@ -66,7 +66,7 @@ def download_adjusted_prices(
     start: str,
     end: Optional[str] = None,
 ) -> pd.DataFrame:
-    \"\"\"Download adjusted close prices and return a clean, date-indexed DataFrame.\"\"\"
+    """Download adjusted close prices and return a clean, date-indexed DataFrame."""
     if not tickers:
         raise ValueError("At least one ticker is required.")
 
